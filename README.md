@@ -1,6 +1,6 @@
 # NanoKiosk
 
-## Building the UI
+![Greatest kiosk ever](nanokiosk.jpeg)
 
 ###### install Qt to your system
 
