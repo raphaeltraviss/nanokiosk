@@ -6,7 +6,10 @@ set(CMAKE_AUTORCC ON)
 project(NanoKiosk)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Network Qml Quick QuickWidgets)
+
 qt6_add_resources(QML_qrc src/qml.qrc)
+qt6_add_resources(QML_qrc src/asset.qrc)
+
 add_executable(nanokiosk src/main.cpp src/MainWindow.cpp ${QML_qrc})
 
 # Windows: copy relavent Qt6 DLL libraries beside the executable.

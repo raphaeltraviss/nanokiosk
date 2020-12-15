@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+  <file alias="lcars_upper_left">../assets/lcars_upper_left.png</file>
+  <file alias="lcars_upper_right">../assets/lcars_upper_right.png</file>
+  <file alias="lcars_lower_right">../assets/lcars_lower_right.png</file>
+  <file alias="lcars_lower_left">../assets/lcars_lower_left.png</file>
+</qresource>
+</RCC>
