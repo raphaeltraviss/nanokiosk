@@ -1,9 +1,10 @@
-import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick 2.1
+import QtQuick.Layouts 1.1
+import QtQuick.Controls 1.1
 
 Rectangle {
-  anchors.fill: parent
+  width: 1
+  height: 1
   color: "black"
 
   GridLayout {
@@ -11,23 +12,19 @@ Rectangle {
     rows: 2
 
     Image {
-      fillMode: Image.PreserveAspectFit 
-      width: 300
+      fillMode: Image.PreserveAspectCrop
       source: "lcars_upper_left"
     }
     Image {
-      fillMode: Image.PreserveAspectFit 
-      width: 300
+      fillMode: Image.PreserveAspectCrop
       source: "lcars_upper_right"
     }
     Image {
-      fillMode: Image.PreserveAspectFit 
-      width: 300
+      fillMode: Image.PreserveAspectCrop
       source: "lcars_lower_left"
     }
     Image {
-      fillMode: Image.PreserveAspectFit 
-      width: 300
+      fillMode: Image.PreserveAspectCrop
       source: "lcars_lower_right"
     }
   }

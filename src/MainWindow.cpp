@@ -28,6 +28,7 @@ void MainWindow::setup_root_view()
 	view->setParent(this);
 	view->setSource(QUrl("qrc:/main.qml"));
 	view->setResizeMode(QQuickWidget::SizeRootObjectToView);
+  view->setStyleSheet("background-color:black;");
 	responsive_view = view;
 }
 
