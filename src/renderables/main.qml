@@ -2,29 +2,33 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-GridLayout {
+Rectangle {
   anchors.fill: parent
-  columns: 2
-  rows: 2
+  color: "black"
 
-  Rectangle {
-    Layout.fillWidth: true
-    Layout.fillHeight: true
-    color: "green"
-  }
-  Rectangle {
-    Layout.fillWidth: true
-    Layout.fillHeight: true
-    color: "blue"
-  }
-  Rectangle {
-    Layout.fillWidth: true
-    Layout.fillHeight: true
-    color: "cyan"
-  }
-  Rectangle {
-    Layout.fillWidth: true
-    Layout.fillHeight: true
-    color: "magenta"
+  GridLayout {
+    columns: 2
+    rows: 2
+
+    Image {
+      fillMode: Image.PreserveAspectFit 
+      width: 300
+      source: "lcars_upper_left"
+    }
+    Image {
+      fillMode: Image.PreserveAspectFit 
+      width: 300
+      source: "lcars_upper_right"
+    }
+    Image {
+      fillMode: Image.PreserveAspectFit 
+      width: 300
+      source: "lcars_lower_left"
+    }
+    Image {
+      fillMode: Image.PreserveAspectFit 
+      width: 300
+      source: "lcars_lower_right"
+    }
   }
 }
