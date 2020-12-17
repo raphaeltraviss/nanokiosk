@@ -3,13 +3,39 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.15
 
 Rectangle {
+  id: "ui"
+
   width: 1
   height: 1
   color: "black"
 
+  state: "INTERFACE READY"
+
+  Flickable {
+    anchors.fill: parent
+    anchors.centerIn: parent
+
+    contentWidth: target_image.sourceSize.width * target_image.scale
+    contentHeight: target_image.sourceSize.height * target_image.scale
+
+    Image {
+      id: "target_image"
+      scale: 10
+
+      anchors.centerIn: parent
+
+      source: "test"
+      visible: true
+    }
+  }
+
   GridLayout {
+    id: "controls_grid"
+
     columns: 2
     rows: 2
+
+    visible: false
 
     Image {
       fillMode: Image.PreserveAspectCrop
@@ -38,7 +64,7 @@ Rectangle {
           font.bold: true
           color: "#ff9500"
 
-          text: "INTERFACE READY"
+          text: ui.state
         }
 
         Button {

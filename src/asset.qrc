@@ -4,5 +4,6 @@
   <file alias="lcars_upper_right">../assets/lcars_upper_right.png</file>
   <file alias="lcars_lower_right">../assets/lcars_lower_right.png</file>
   <file alias="lcars_lower_left">../assets/lcars_lower_left.png</file>
+  <file alias="test">../nanokiosk.jpeg</file>
 </qresource>
 </RCC>
