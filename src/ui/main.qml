@@ -18,50 +18,35 @@ Rectangle {
     Image {
       fillMode: Image.PreserveAspectCrop
       source: "lcars_upper_right"
-    }
-    Image {
-      fillMode: Image.PreserveAspectCrop
-      source: "lcars_lower_left"
-    }
-    Image {
-      fillMode: Image.PreserveAspectCrop
-      source: "lcars_lower_right"
 
-      Row {
-        layoutDirection: Qt.RightToLeft
+
+      Column {
         spacing: 10
 
-        width: parent.width - 55
-        height: 103
+        width: parent.width - 41
+        anchors.top: parent.top
+        anchors.topMargin: 60
 
-      
-        Button {
-          id: pair_reject_button
+        Label {
+          height: 90
 
-          height: 56
-          y: parent.height - height
-
-          text: "    CANCEL PAIR    "
-          enabled: true
-          visible: true
+          horizontalAlignment: Text.AlignRight
+          anchors.right: parent.right
 
           font.family: "Helvetica Neue"
-          font.pointSize: 24
+          font.pointSize: 56
           font.bold: true
+          color: "#ff9500"
 
-          background: Rectangle {
-            color: enabled ? "#9496ff" : "#444444"
-            radius: parent.height/2
-          }
-
-          onClicked: enabled = !enabled
+          text: "INTERFACE READY"
         }
 
         Button {
           id: pair_confirm_button
 
+          anchors.right: parent.right
+
           height: 56
-          y: parent.height - height
 
           text: "    START PAIR    "
           enabled: true
@@ -80,8 +65,39 @@ Rectangle {
             pair_confirm_button.enabled = !pair_confirm_button.enabled
           }
         }
+      
+        Button {
+          id: pair_reject_button
 
+          anchors.right: parent.right
+
+          height: 56
+
+          text: "    CANCEL PAIR    "
+          enabled: true
+          visible: true
+
+          font.family: "Helvetica Neue"
+          font.pointSize: 24
+          font.bold: true
+
+          background: Rectangle {
+            color: enabled ? "#9496ff" : "#444444"
+            radius: parent.height/2
+          }
+
+          onClicked: enabled = !enabled
+        }
       }
+    }
+    Image {
+      fillMode: Image.PreserveAspectCrop
+      source: "lcars_lower_left"
+    }
+    Image {
+      fillMode: Image.PreserveAspectCrop
+      source: "lcars_lower_right"
+
     }
   }
 }
