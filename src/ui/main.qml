@@ -9,7 +9,7 @@ Rectangle {
   height: 1
   color: "black"
 
-  state: "INTERFACE READY"
+  property string myState: "INTERFACE READY"
 
   function showFlickable() {
     controlsGrid.enabled = false
@@ -34,6 +34,12 @@ Rectangle {
 
     onTriggered: showGrid()
   }
+
+  focus: true
+
+  Keys.onEnterPressed: showFlickable()
+  Keys.onLeftPressed: showFlickable()
+  Keys.onRightPressed: showGrid()
 
   Flickable {
     id: "flickableImage"
@@ -90,7 +96,7 @@ Rectangle {
           font.bold: true
           color: "#ff9500"
 
-          text: ui.state
+          text: ui.myState
         }
 
         Button {

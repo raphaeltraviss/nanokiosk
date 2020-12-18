@@ -13,6 +13,12 @@
 #include <iostream>
 
 
+constexpr int up = 16777236;
+constexpr int down = 16777234;
+constexpr int released = 16777250;
+
+
+
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -29,6 +35,9 @@ void MainWindow::setup_root_view()
 	view->setSource(QUrl("qrc:/main.qml"));
 	view->setResizeMode(QQuickWidget::SizeRootObjectToView);
   view->setStyleSheet("background-color:black;");
+
+  view->installEventFilter(this);
+
 	responsive_view = view;
 }
 
@@ -37,3 +46,24 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
 	responsive_view->resize(the_width, responsive_view->height());
 }
 
+
+bool MainWindow::eventFilter(QObject *object, QEvent *event)
+{
+  if (event->type() == QEvent::KeyPress) {
+    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+
+    const int keyValue = keyEvent->key();
+
+    qDebug() << "key" << keyValue << " press on " << object;
+
+    if (keyValue == up) {
+      responsive_view->rootObject()->setProperty("myState", "UP WAS PRESSED");
+    }
+    else if (keyValue == down) {
+      qDebug() << "down was pressed!";
+    }
+
+    return true;
+  }
+  return false;
+}
