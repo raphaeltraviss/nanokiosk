@@ -16,7 +16,8 @@ Rectangle {
     controlsGrid.visible = false
     flickableImage.enabled = true
     flickableImage.visible = true
-    // set timer to call show_grid
+
+    flickableTimer.start()
   }
 
   function showGrid() {
@@ -24,6 +25,14 @@ Rectangle {
     controlsGrid.visible = true
     flickableImage.enabled = false
     flickableImage.visible = false
+  }
+
+  Timer {
+    id: "flickableTimer"
+
+    interval: 3000
+
+    onTriggered: showGrid()
   }
 
   Flickable {
