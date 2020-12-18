@@ -11,31 +11,48 @@ Rectangle {
 
   state: "INTERFACE READY"
 
+  function showFlickable() {
+    controlsGrid.enabled = false
+    controlsGrid.visible = false
+    flickableImage.enabled = true
+    flickableImage.visible = true
+    // set timer to call show_grid
+  }
+
+  function showGrid() {
+    controlsGrid.enabled = true
+    controlsGrid.visible = true
+    flickableImage.enabled = false
+    flickableImage.visible = false
+  }
+
   Flickable {
+    id: "flickableImage"
+
     anchors.fill: parent
     anchors.centerIn: parent
 
-    contentWidth: target_image.sourceSize.width * target_image.scale
-    contentHeight: target_image.sourceSize.height * target_image.scale
+    contentWidth: targetImage.sourceSize.width * targetImage.scale
+    contentHeight: targetImage.sourceSize.height * targetImage.scale
+
+    visible: false
+    enabled: false
 
     Image {
-      id: "target_image"
+      id: "targetImage"
       scale: 10
 
       anchors.centerIn: parent
 
       source: "test"
-      visible: true
     }
   }
 
   GridLayout {
-    id: "controls_grid"
+    id: "controlsGrid"
 
     columns: 2
     rows: 2
-
-    visible: false
 
     Image {
       fillMode: Image.PreserveAspectCrop
@@ -68,7 +85,7 @@ Rectangle {
         }
 
         Button {
-          id: pair_confirm_button
+          id: pairConfirmButton
 
           anchors.right: parent.right
 
@@ -87,13 +104,11 @@ Rectangle {
             radius: parent.height / 2
           }
 
-          onClicked: {
-            pair_confirm_button.enabled = !pair_confirm_button.enabled
-          }
+          onClicked: showFlickable()
         }
       
         Button {
-          id: pair_reject_button
+          id: pairRejectButton
 
           anchors.right: parent.right
 
