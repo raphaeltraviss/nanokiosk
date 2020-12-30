@@ -9,7 +9,7 @@ Rectangle {
   height: 1
   color: "black"
 
-  property string myState: "INTERFACE READY"
+  property string myState: "INTERFACE IDLE"
 
   function showFlickable() {
     controlsGrid.enabled = false
@@ -26,6 +26,10 @@ Rectangle {
     flickableImage.enabled = false
     flickableImage.visible = false
   }
+  
+  function setReadyState() {
+    myState = "INTERFACE READY"
+  }
 
   Timer {
     id: "flickableTimer"
@@ -33,6 +37,15 @@ Rectangle {
     interval: 3000
 
     onTriggered: showGrid()
+  }
+
+  Timer {
+    id: "stateTimer"
+
+    interval: 5000
+    running: true
+
+    onTriggered: setReadyState()
   }
 
   focus: true
