@@ -5,12 +5,12 @@ set(CMAKE_AUTORCC ON)
 
 project(NanoKiosk)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Network Qml Quick QuickWidgets)
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Network Qml Quick QuickWidgets Bluetooth)
 
 qt5_add_resources(QML_qrc src/qml.qrc)
 qt5_add_resources(QML_qrc src/asset.qrc)
 
-add_executable(nanokiosk src/main.cpp src/MainWindow.cpp ${QML_qrc})
+add_executable(nanokiosk src/main.cpp src/MainWindow.cpp src/BluetoothServer.cpp ${QML_qrc})
 
 # Windows: copy relavent Qt6 DLL libraries beside the executable.
 add_custom_command(
@@ -22,8 +22,9 @@ add_custom_command(
         $<TARGET_FILE:Qt5::Network>
         $<TARGET_FILE:Qt5::Qml>
         $<TARGET_FILE:Qt5::Quick>
+        $<TARGET_FILE:Qt5::Bluetooth>
         $<TARGET_FILE:Qt5::QuickWidgets>
         $<TARGET_FILE_DIR:nanokiosk>
 )
 
-target_link_libraries(nanokiosk Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network Qt5::Quick Qt5::Qml Qt5::QuickWidgets)
+target_link_libraries(nanokiosk Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network Qt5::Quick Qt5::Qml Qt5::QuickWidgets Qt5::Bluetooth)
