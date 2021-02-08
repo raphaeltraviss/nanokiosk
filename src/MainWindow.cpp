@@ -38,8 +38,15 @@ void MainWindow::setup_root_view()
 
   view->installEventFilter(this);
 
+  QObject::connect(view->rootObject(), SIGNAL(initPairing()), this, SLOT(doStuff()));
 	responsive_view = view;
 }
+
+
+void MainWindow::doStuff() {
+  qDebug() << "Hey there";
+}
+
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
 	int the_width = event->size().width();

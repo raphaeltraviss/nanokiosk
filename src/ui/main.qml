@@ -9,6 +9,8 @@ Rectangle {
   height: 1
   color: "black"
 
+  signal initPairing()
+
   property string myState: "INTERFACE IDLE"
 
   function showFlickable() {
@@ -18,6 +20,11 @@ Rectangle {
     flickableImage.visible = true
 
     flickableTimer.start()
+  }
+
+
+  function startPairing() {
+    ui.initPairing()
   }
 
   function showGrid() {
@@ -132,7 +139,7 @@ Rectangle {
             radius: parent.height / 2
           }
 
-          onClicked: showFlickable()
+          onClicked: startPairing()
         }
       
         Button {
