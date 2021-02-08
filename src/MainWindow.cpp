@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include "BluetoothServer.h"
 
 #include <QTextStream>
 #include <QDebug>
@@ -22,9 +23,10 @@ constexpr int released = 16777250;
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
-	setup_root_view();
+  setup_root_view();
   resize(1200, 1920);
-	responsive_view->resize(1200, 1920);
+  responsive_view->resize(1200, 1920);
+  bt_server = new BluetoothServer(this);
 }
 
 
@@ -45,6 +47,7 @@ void MainWindow::setup_root_view()
 
 void MainWindow::doStuff() {
   qDebug() << "Hey there";
+  bt_server->startServer();
 }
 
 
