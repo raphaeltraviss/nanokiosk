@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
   setup_root_view();
   resize(1200, 1920);
   responsive_view->resize(1200, 1920);
+
   bt_server = new BluetoothServer(this);
 }
 
@@ -40,14 +41,23 @@ void MainWindow::setup_root_view()
 
   view->installEventFilter(this);
 
-  QObject::connect(view->rootObject(), SIGNAL(initPairing()), this, SLOT(doStuff()));
+  QObject::connect(view->rootObject(), SIGNAL(initPairing()), this, SLOT(handleInitPairing()));
 	responsive_view = view;
 }
 
 
-void MainWindow::doStuff() {
-  qDebug() << "Hey there";
+void MainWindow::handleInitPairing() {
+  bt_server->stopServer();
+
+  qDebug() << "Hey there!";
+  QObject::connect(bt_server, SIGNAL(messageReceived(const QString, const QString)),
+               this, SLOT(logMessage(QString const&)));
+
   bt_server->startServer();
+}
+
+void MainWindow::logMessage(QString const& subject) {
+  qDebug() << "Received bluetooth event: " << subject;
 }
 
 

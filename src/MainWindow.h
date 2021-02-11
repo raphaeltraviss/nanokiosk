@@ -13,7 +13,8 @@ public:
   MainWindow(QWidget *parent = Q_NULLPTR);
 
 public slots:
-  void doStuff();
+  void handleInitPairing();
+  void logMessage(QString const& subject);
 
 protected:
 	void resizeEvent(QResizeEvent * event);

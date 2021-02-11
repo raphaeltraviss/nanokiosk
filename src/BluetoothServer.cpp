@@ -41,10 +41,10 @@ void BluetoothServer::startServer(const QBluetoothAddress& localAdapter)
 
   serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceClassIds, classId);
 
-  serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceName, tr("Bt Chat Server"));
+  serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceName, tr("Nanokiosk"));
   serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceDescription,
-                            tr("Example bluetooth chat server"));
-  serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceProvider, tr("qt-project.org"));
+                            tr("Art visualization device"));
+  serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceProvider, tr("skyleafdesign.com"));
 
   serviceInfo.setServiceUuid(QBluetoothUuid(serviceUuid));
 

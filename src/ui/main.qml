@@ -25,6 +25,7 @@ Rectangle {
 
   function startPairing() {
     ui.initPairing()
+    pairConfirmButton.enabled = false
   }
 
   function showGrid() {
