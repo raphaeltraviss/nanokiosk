@@ -10,7 +10,13 @@ find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Network Qml Quick QuickWid
 qt5_add_resources(QML_qrc src/qml.qrc)
 qt5_add_resources(QML_qrc src/asset.qrc)
 
-add_executable(nanokiosk src/main.cpp src/MainWindow.cpp src/BluetoothServer.cpp ${QML_qrc})
+add_executable(nanokiosk
+  src/main.cpp
+  src/MainWindow.cpp
+  src/BluetoothServer.cpp
+  src/SocketServer.cpp
+  ${QML_qrc}
+)
 
 # Windows: copy relavent Qt6 DLL libraries beside the executable.
 add_custom_command(

@@ -19,11 +19,12 @@ void BluetoothServer::startServer(const QBluetoothAddress& localAdapter)
   if (rfcommServer) return;
 
   rfcommServer = new QBluetoothServer(QBluetoothServiceInfo::RfcommProtocol, this);
+
   connect(rfcommServer, &QBluetoothServer::newConnection,
           this, QOverload<>::of(&BluetoothServer::clientConnected));
   bool result = rfcommServer->listen(localAdapter);
   if (!result) {
-    qWarning() << "Cannot bind chat server to" << localAdapter.toString();
+    qWarning() << "Cannot bind Nanokiosk server to" << localAdapter.toString();
     return;
   }
 
@@ -47,6 +48,7 @@ void BluetoothServer::startServer(const QBluetoothAddress& localAdapter)
   serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceProvider, tr("skyleafdesign.com"));
 
   serviceInfo.setServiceUuid(QBluetoothUuid(serviceUuid));
+
 
   QBluetoothServiceInfo::Sequence publicBrowse;
   publicBrowse << QVariant::fromValue(QBluetoothUuid(QBluetoothUuid::PublicBrowseGroup));
