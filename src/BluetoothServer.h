@@ -2,11 +2,13 @@
 
 #include <QtCore>
 #include <QtBluetooth>
+#include "BluetoothListener.h"
 
 
-class BluetoothServer : public QObject
+class BluetoothServer : public QObject, public BluetoothListener
 {
   Q_OBJECT
+  Q_INTERFACES(BluetoothListener)
 
 public:
   explicit BluetoothServer(QObject *parent = nullptr);

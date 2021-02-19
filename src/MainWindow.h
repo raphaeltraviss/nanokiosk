@@ -4,6 +4,7 @@
 #include <QtQuick>
 #include <QQuickWidget>
 #include "BluetoothServer.h"
+#include "BluetoothListener.h"
 
 class MainWindow : public QMainWindow
 {
@@ -22,7 +23,6 @@ protected:
 private:
 	void setup_root_view();
   QQuickWidget* responsive_view;
-  BluetoothServer* bt_server;
+  BluetoothListener* bt_server;
 	bool eventFilter(QObject *obj, QEvent *ev);
-
 };

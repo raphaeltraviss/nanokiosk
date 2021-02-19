@@ -57,10 +57,10 @@ void MainWindow::handleInitPairing() {
   }
   QBluetoothAddress bt_addr = localAdapters.at(0).address();
 
-  QObject::connect(bt_server, SIGNAL(messageReceived(const QString, const QString)),
+  QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(messageReceived(const QString, const QString)),
                this, SLOT(logMessage(QString const&)));
 
-  bt_server->startServer();
+  bt_server->startServer(bt_addr);
 }
 
 void MainWindow::logMessage(QString const& subject) {
