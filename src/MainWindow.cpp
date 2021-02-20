@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "BluetoothServer.h"
+#include "SocketServer.h"
 
 #include <QTextStream>
 #include <QDebug>
@@ -43,7 +44,7 @@ void MainWindow::setup_root_view()
   QObject::connect(view->rootObject(), SIGNAL(initPairing()), this, SLOT(handleInitPairing()));
 	responsive_view = view;
 
-  bt_server = new BluetoothServer(this);
+  bt_server = new SocketServer(this);
 }
 
 

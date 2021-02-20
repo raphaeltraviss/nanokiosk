@@ -1,20 +1,18 @@
 #include "SocketServer.h"
 
-#include <QtCore>
-#include <QLocalServer>
-
-
 
 SocketServer::SocketServer(QObject *parent)
   : QObject(parent)
-{}
+{
+  qWarning() << "Creating the socket server";
+}
 
 SocketServer::~SocketServer() {
   stopServer();
 }
 
 
-void SocketServer::startServer(QString const& name)
+void SocketServer::startServer(QBluetoothAddress const& localAdapter)
 {
   qWarning() << "Starting socket server";
 }

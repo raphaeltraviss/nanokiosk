@@ -1,18 +1,22 @@
 #pragma once
 
+#include "BluetoothListener.h"
+
 #include <QtCore>
 #include <QLocalServer>
+#include <QtBluetooth>
 
 
-class SocketServer : public QObject
+class SocketServer : public QObject, public BluetoothListener
 {
   Q_OBJECT
+  Q_INTERFACES(BluetoothListener)
 
 public:
   explicit SocketServer(QObject *parent = nullptr);
   ~SocketServer();
 
-  void startServer(QString const& name);
+  void startServer(QBluetoothAddress const& localAdapter);
   void stopServer();
 
 public slots:
