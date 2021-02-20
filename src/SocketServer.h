@@ -29,6 +29,7 @@ signals:
 
 private:
     QLocalServer* serverHandle = nullptr;
+
 private slots:
   void handleConnection();
 };

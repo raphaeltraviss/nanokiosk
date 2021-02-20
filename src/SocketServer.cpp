@@ -6,10 +6,6 @@ SocketServer::SocketServer(QObject *parent)
 {
   qWarning() << "Creating the socket server";
   serverHandle = new QLocalServer(this);
-
-
-  QObject::connect(serverHandle, SIGNAL(newConnection),
-                   this,         SLOT(handleConnection)); 
 }
 
 SocketServer::~SocketServer() {
@@ -20,12 +16,14 @@ SocketServer::~SocketServer() {
 void SocketServer::startServer(QBluetoothAddress const& localAdapter)
 {
   qWarning() << "Starting socket server";
-  serverHandle->listen("test-server");
+  QObject::connect(serverHandle, SIGNAL(newConnection()),
+                   this,         SLOT(handleConnection())); 
+  serverHandle->listen("test-server.sock");
 }
 
 void SocketServer::stopServer()
 {
-  qWarning() << "Starting socket server";
+  qWarning() << "STOPPING socket server";
 }
 
 void SocketServer::sendMessage(QString const& name)
