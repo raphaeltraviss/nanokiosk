@@ -4,6 +4,8 @@
 
 #include <QtCore>
 #include <QLocalServer>
+#include <QLocalSocket>
+#include <QIODevice>
 #include <QtBluetooth>
 
 
@@ -28,8 +30,10 @@ signals:
   void clientDisconnected(const QString &name);
 
 private:
-    QLocalServer* serverHandle = nullptr;
+  QLocalServer* serverHandle = nullptr;
+  QLocalSocket* activeConnection = nullptr;
 
 private slots:
   void handleConnection();
+  void handleText();
 };
