@@ -16,6 +16,8 @@ public:
 public slots:
   void handleInitPairing();
   void logMessage(QString const& subject);
+  void pairClient(QString const& subject);
+  void unpairClient(QString const& subject);
 
 protected:
 	void resizeEvent(QResizeEvent * event);

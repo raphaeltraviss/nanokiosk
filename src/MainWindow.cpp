@@ -61,6 +61,12 @@ void MainWindow::handleInitPairing() {
   QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(messageReceived(const QString, const QString)),
                this, SLOT(logMessage(QString const&)));
 
+  QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(clientConnected(const QString)),
+               this, SLOT(pairClient(QString const&)));
+
+  QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(clientDisconnected(const QString)),
+               this, SLOT(unpairClient(QString const&)));
+
   bt_server->startServer(bt_addr);
 }
 
@@ -68,6 +74,13 @@ void MainWindow::logMessage(QString const& subject) {
   qDebug() << "Received bluetooth event: " << subject;
 }
 
+void MainWindow::pairClient(QString const& subject) {
+  qDebug() << "Paired with client: " << subject;
+}
+
+void MainWindow::unpairClient(QString const& subject) {
+  qDebug() << "Unpaired client: " << subject;
+}
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
 	int the_width = event->size().width();

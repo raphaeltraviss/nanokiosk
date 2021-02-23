@@ -53,5 +53,33 @@ void SocketServer::handleConnection()
 }
 
 void SocketServer::handleText() {
-  qDebug() << activeConnection->readAll();
+  QByteArray data = activeConnection->readAll();
+  QString command = QString::fromUtf8(data).trimmed();
+
+  QStringList commands;
+  commands << "pair" << "unpair" << "send" << "accept";
+
+  switch (commands.indexOf(command)) {
+    case 0: // pair
+      emit clientConnected("test-server.sock");
+      break;
+    case 1: // unpair
+      emit clientDisconnected("test-server.sock");
+      break;
+    case 2: // send
+      // @TODO: call slot with data from the app's signal
+      break;
+    case 3: // accept
+      emit messageReceived("test-server.sock", "A Bluetooth message.");
+      break;
+  }
+
+
 }
+
+
+
+
+
+
+
