@@ -9,9 +9,12 @@ Rectangle {
   height: 1
   color: "black"
 
-  signal initPairing()
+  signal pleaseOpenConnection()
+  signal pleaseCloseConnection()
 
-  property string myState: "INTERFACE IDLE"
+  property string myState: "NANOKIOSK IDLE"
+
+  // UI mutation
 
   function showFlickable() {
     controlsGrid.enabled = false
@@ -22,38 +25,38 @@ Rectangle {
     flickableTimer.start()
   }
 
-
-  function startPairing() {
-    ui.initPairing()
-    pairConfirmButton.enabled = false
-  }
-
   function showGrid() {
     controlsGrid.enabled = true
     controlsGrid.visible = true
     flickableImage.enabled = false
     flickableImage.visible = false
   }
-  
-  function setReadyState() {
-    myState = "INTERFACE READY"
+
+  // State transitions
+
+  function toPairing() {
+    ui.pleaseOpenConnection()
+    pairConfirmButton.enabled = false
+    myState = "AWAITING CONNECTION"
   }
 
+  function toIdle() {
+    myState = "NANOKIOSK IDLE"
+    pairConfirmButton.enabled = true
+    showGrid()
+  }
+
+  function toConnected() {
+    myState = "CLIENT CONNECTED"
+
+  }
+  
   Timer {
     id: "flickableTimer"
 
     interval: 3000
 
     onTriggered: showGrid()
-  }
-
-  Timer {
-    id: "stateTimer"
-
-    interval: 5000
-    running: true
-
-    onTriggered: setReadyState()
   }
 
   focus: true
@@ -140,7 +143,7 @@ Rectangle {
             radius: parent.height / 2
           }
 
-          onClicked: startPairing()
+          onClicked: toPairing()
         }
       
         Button {
@@ -163,7 +166,7 @@ Rectangle {
             radius: parent.height/2
           }
 
-          onClicked: enabled = !enabled
+          onClicked: ui.pleaseCloseConnection()
         }
       }
     }

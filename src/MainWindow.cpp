@@ -24,14 +24,13 @@ constexpr int released = 16777250;
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
-  setup_root_view();
+  setupRootView();
   resize(1200, 1920);
-  responsive_view->resize(1200, 1920);
-
+  ui->resize(1200, 1920);
 }
 
 
-void MainWindow::setup_root_view()
+void MainWindow::setupRootView()
 {
 	QQuickWidget *view = new QQuickWidget;
 	view->setParent(this);
@@ -41,22 +40,18 @@ void MainWindow::setup_root_view()
 
   view->installEventFilter(this);
 
-  QObject::connect(view->rootObject(), SIGNAL(initPairing()), this, SLOT(handleInitPairing()));
-	responsive_view = view;
+	ui = view;
 
-  bt_server = new SocketServer(this);
+  attachComms();
 }
 
 
-void MainWindow::handleInitPairing() {
-  qDebug() << "Initializing bluetooth peripheral server";
+void MainWindow::attachComms() {
+  bt_server = new SocketServer(this);
 
-  QList<QBluetoothHostInfo> localAdapters = QBluetoothLocalDevice::allDevices();
-  foreach (QBluetoothHostInfo bt_dev, localAdapters) {
-    qDebug() << bt_dev.name();
-    qDebug() << bt_dev.address();
-  }
-  QBluetoothAddress bt_addr = localAdapters.at(0).address();
+  QObject::connect(ui->rootObject(), SIGNAL(pleaseOpenConnection()), this, SLOT(openConnection()));
+  QObject::connect(ui->rootObject(), SIGNAL(pleaseCloseConnection()), this, SLOT(closeConnection()));
+
 
   QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(messageReceived(const QString, const QString)),
                this, SLOT(logMessage(QString const&)));
@@ -66,8 +61,25 @@ void MainWindow::handleInitPairing() {
 
   QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(clientDisconnected(const QString)),
                this, SLOT(unpairClient(QString const&)));
+}
+
+void MainWindow::openConnection() {
+  qDebug() << "Opening the client connection";
+
+  QList<QBluetoothHostInfo> localAdapters = QBluetoothLocalDevice::allDevices();
+  foreach (QBluetoothHostInfo bt_dev, localAdapters) {
+    qDebug() << bt_dev.name();
+    qDebug() << bt_dev.address();
+  }
+  QBluetoothAddress bt_addr = localAdapters.at(0).address();
 
   bt_server->startServer(bt_addr);
+}
+
+void MainWindow::closeConnection() {
+  bt_server->stopServer();
+  // @TODO: check that it was stopped successfully
+  QMetaObject::invokeMethod(ui->rootObject(), "toIdle");
 }
 
 void MainWindow::logMessage(QString const& subject) {
@@ -76,15 +88,17 @@ void MainWindow::logMessage(QString const& subject) {
 
 void MainWindow::pairClient(QString const& subject) {
   qDebug() << "Paired with client: " << subject;
+  QMetaObject::invokeMethod(ui->rootObject(), "toConnected");
 }
 
 void MainWindow::unpairClient(QString const& subject) {
   qDebug() << "Unpaired client: " << subject;
+
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
 	int the_width = event->size().width();
-	responsive_view->resize(the_width, responsive_view->height());
+	ui->resize(the_width, ui->height());
 }
 
 
@@ -98,7 +112,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
     qDebug() << "key" << keyValue << " press on " << object;
 
     if (keyValue == up) {
-      responsive_view->rootObject()->setProperty("myState", "UP WAS PRESSED");
+      ui->rootObject()->setProperty("myState", "UP WAS PRESSED");
     }
     else if (keyValue == down) {
       qDebug() << "down was pressed!";

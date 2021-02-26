@@ -35,7 +35,6 @@ void SocketServer::stopServer()
     serverHandle->close();
     serverHandle->removeServer("test-server.sock");
     serverHandle = nullptr;
-
   }
 }
 
@@ -50,6 +49,7 @@ void SocketServer::handleConnection()
   activeConnection = serverHandle->nextPendingConnection();
   QObject::connect(activeConnection, SIGNAL(readyRead()),
                    this,         SLOT(handleText())); 
+  emit clientConnected("test-server.sock");
 }
 
 void SocketServer::handleText() {
