@@ -25,32 +25,37 @@ MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
   setupRootView();
-  resize(1200, 1920);
-  ui->resize(1200, 1920);
+  attachView();
+  attachComms();
 }
 
 
 void MainWindow::setupRootView()
 {
 	QQuickWidget *view = new QQuickWidget;
+
 	view->setParent(this);
 	view->setSource(QUrl("qrc:/main.qml"));
 	view->setResizeMode(QQuickWidget::SizeRootObjectToView);
   view->setStyleSheet("background-color:black;");
-
   view->installEventFilter(this);
 
-	ui = view;
+  resize(1200, 1920);
+  view->resize(1200, 1920);
 
-  attachComms();
+	ui = view;
+}
+
+
+void MainWindow::attachView() {
+  QObject::connect(ui->rootObject(), SIGNAL(pleaseOpenConnection()), this, SLOT(openConnection()));
+  QObject::connect(ui->rootObject(), SIGNAL(pleaseCloseConnection()), this, SLOT(closeConnection()));
 }
 
 
 void MainWindow::attachComms() {
   bt_server = new SocketServer(this);
 
-  QObject::connect(ui->rootObject(), SIGNAL(pleaseOpenConnection()), this, SLOT(openConnection()));
-  QObject::connect(ui->rootObject(), SIGNAL(pleaseCloseConnection()), this, SLOT(closeConnection()));
 
 
   QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(messageReceived(const QString, const QString)),
@@ -61,6 +66,9 @@ void MainWindow::attachComms() {
 
   QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(clientDisconnected(const QString)),
                this, SLOT(unpairClient(QString const&)));
+
+  QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(commandLoadImage(const QString, const QString)),
+               this, SLOT(setImageUrl(QString const&, QString const&)));
 }
 
 void MainWindow::openConnection() {
@@ -93,7 +101,12 @@ void MainWindow::pairClient(QString const& subject) {
 
 void MainWindow::unpairClient(QString const& subject) {
   qDebug() << "Unpaired client: " << subject;
+}
 
+void MainWindow::setImageUrl(QString const& sender, QString const& url) {
+  qDebug() << sender << " is setting the image URL to" << url;
+  QMetaObject::invokeMethod(ui->rootObject(), "loadImage",
+     Q_ARG(QVariant, url));
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {

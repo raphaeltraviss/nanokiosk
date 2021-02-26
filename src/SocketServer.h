@@ -28,6 +28,7 @@ signals:
   void messageReceived(const QString &sender, const QString &message);
   void clientConnected(const QString &name);
   void clientDisconnected(const QString &name);
+  void commandLoadImage(const QString &sender, const QString &url);
 
 private:
   QLocalServer* serverHandle = nullptr;

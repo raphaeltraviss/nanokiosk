@@ -17,12 +17,11 @@ Rectangle {
   // UI mutation
 
   function showFlickable() {
+    console.log("Showing the image!")
     controlsGrid.enabled = false
     controlsGrid.visible = false
     flickableImage.enabled = true
     flickableImage.visible = true
-
-    flickableTimer.start()
   }
 
   function showGrid() {
@@ -30,6 +29,11 @@ Rectangle {
     controlsGrid.visible = true
     flickableImage.enabled = false
     flickableImage.visible = false
+  }
+
+  function loadImage(url) {
+    targetImage.source = url
+    showFlickable()
   }
 
   // State transitions
@@ -51,14 +55,6 @@ Rectangle {
 
   }
   
-  Timer {
-    id: "flickableTimer"
-
-    interval: 3000
-
-    onTriggered: showGrid()
-  }
-
   focus: true
 
   Keys.onEnterPressed: showFlickable()
@@ -79,7 +75,7 @@ Rectangle {
 
     Image {
       id: "targetImage"
-      scale: 10
+      scale: 1
 
       anchors.centerIn: parent
 

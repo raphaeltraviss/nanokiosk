@@ -54,12 +54,22 @@ void SocketServer::handleConnection()
 
 void SocketServer::handleText() {
   QByteArray data = activeConnection->readAll();
-  QString command = QString::fromUtf8(data).trimmed();
+  QString commandLine = QString::fromUtf8(data).trimmed();
+  QStringList commands = commandLine.split(" ");
+  qDebug() << commands;
 
-  QStringList commands;
-  commands << "pair" << "unpair" << "send" << "accept";
+  if (commands.isEmpty()) {
+    qWarning("Skipped empty command");
+    return;
+  }
+  
+  QString command = commands.takeFirst();
+  qDebug() << command;
 
-  switch (commands.indexOf(command)) {
+  QStringList commandList;
+  commandList << "pair" << "unpair" << "send" << "accept" << "load";
+
+  switch (commandList.indexOf(command)) {
     case 0: // pair
       emit clientConnected("test-server.sock");
       break;
@@ -71,6 +81,17 @@ void SocketServer::handleText() {
       break;
     case 3: // accept
       emit messageReceived("test-server.sock", "A Bluetooth message.");
+      break;
+    case 4: // load
+      QString url;
+      if (commands.isEmpty()) {
+        url = "https://picsum.photos/2000/3000";
+      }
+      else {
+        url = commands.takeFirst();
+      }
+
+      emit commandLoadImage("test-server.sock", url);
       break;
   }
 
