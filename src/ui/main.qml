@@ -13,6 +13,8 @@ Rectangle {
   signal pleaseCloseConnection()
 
   property string myState: "NANOKIOSK IDLE"
+  property int aspectWidth: 3
+  property int aspectHeight: 4
 
   // UI mutation
 
@@ -34,6 +36,19 @@ Rectangle {
   function loadImage(url) {
     targetImage.source = url
     showFlickable()
+    console.log("Source size is", targetImage.sourceSize)
+  }
+
+  function setImageScale() {
+    const targetAspect = aspectWidth / aspectHeight
+    const imageSize = targetImage.sourceSize
+
+    const lengthRatio = imageSize.width / flickableImage.width
+    const heightRatio = imageSize.height / flickableImage.height
+
+    const ratioCalcValue = lengthRatio > heightRatio ? lengthRatio : heightRatio
+
+    targetImage.scale = 1.0 / ratioCalcValue
   }
 
   // State transitions
@@ -80,6 +95,12 @@ Rectangle {
       anchors.centerIn: parent
 
       source: "test"
+
+      onStatusChanged: {
+        if (status == Image.Ready) {
+          setImageScale()
+        }
+      }
     }
   }
 
