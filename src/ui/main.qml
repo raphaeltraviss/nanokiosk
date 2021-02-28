@@ -16,6 +16,7 @@ Rectangle {
   property int aspectWidth: 3
   property int aspectHeight: 4
 
+
   // UI mutation
 
   function showFlickable() {
@@ -39,7 +40,7 @@ Rectangle {
     console.log("Source size is", targetImage.sourceSize)
   }
 
-  function setImageScale() {
+  function scaleToFit() {
     const targetAspect = aspectWidth / aspectHeight
     const imageSize = targetImage.sourceSize
 
@@ -48,8 +49,21 @@ Rectangle {
 
     const ratioCalcValue = lengthRatio > heightRatio ? lengthRatio : heightRatio
 
-    targetImage.scale = 1.0 / ratioCalcValue
+    setImageScale(1.0 / ratioCalcValue)
   }
+
+  function zoomIn() {
+    targetImage.scale *= 1.2
+  }
+
+  function zoomOut() {
+    targetImage.scale *= 0.8
+  }
+  
+  function setImageScale(value) {
+    targetImage.scale = value
+  }
+
 
   // State transitions
 
@@ -85,23 +99,42 @@ Rectangle {
     contentWidth: targetImage.sourceSize.width * targetImage.scale
     contentHeight: targetImage.sourceSize.height * targetImage.scale
 
+    pressDelay: 500
+
     visible: false
     enabled: false
 
-    Image {
-      id: "targetImage"
-      scale: 1
+    function centerToClick(x, y) {
+      console.log(x, y);
+      // @TODO: cast click coords through the Flickable to the
+      // content image below
+      // @TODO: center content.x/y coords in the Flickable view
+      flick(-x, -y)
+    }
 
-      anchors.centerIn: parent
+    MouseArea {
 
-      source: "test"
+      anchors.fill: parent
 
-      onStatusChanged: {
-        if (status == Image.Ready) {
-          setImageScale()
+      onClicked: function(ev) {
+        flickableImage.centerToClick(ev.x, ev.y)
+      }
+
+      Image {
+        id: "targetImage"
+        scale: 1
+
+        anchors.centerIn: parent
+
+        source: "test"
+
+        onStatusChanged: {
+          if (status !== Image.Ready) { return }
+          scaleToFit()
         }
       }
     }
+
   }
 
   GridLayout {

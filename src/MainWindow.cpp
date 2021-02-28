@@ -15,8 +15,11 @@
 #include <iostream>
 
 
-constexpr int up = 16777236;
-constexpr int down = 16777234;
+constexpr int page_up = 16777236;
+constexpr int page_down = 16777234;
+constexpr int plus = 43;
+constexpr int minus = 45;
+constexpr int equals = 61;
 constexpr int released = 16777250;
 
 
@@ -46,17 +49,13 @@ void MainWindow::setupRootView()
 	ui = view;
 }
 
-
 void MainWindow::attachView() {
   QObject::connect(ui->rootObject(), SIGNAL(pleaseOpenConnection()), this, SLOT(openConnection()));
   QObject::connect(ui->rootObject(), SIGNAL(pleaseCloseConnection()), this, SLOT(closeConnection()));
 }
 
-
 void MainWindow::attachComms() {
   bt_server = new SocketServer(this);
-
-
 
   QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(messageReceived(const QString, const QString)),
                this, SLOT(logMessage(QString const&)));
@@ -124,11 +123,14 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 
     qDebug() << "key" << keyValue << " press on " << object;
 
-    if (keyValue == up) {
-      ui->rootObject()->setProperty("myState", "UP WAS PRESSED");
+    if (keyValue == plus || keyValue == page_up) {
+      QMetaObject::invokeMethod(ui->rootObject(), "zoomIn");
     }
-    else if (keyValue == down) {
-      qDebug() << "down was pressed!";
+    else if (keyValue == minus || keyValue == page_down) {
+      QMetaObject::invokeMethod(ui->rootObject(), "zoomOut");
+    }
+    else if (keyValue == equals) {
+      QMetaObject::invokeMethod(ui->rootObject(), "scaleToFit");
     }
 
     return true;
