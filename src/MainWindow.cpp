@@ -44,7 +44,7 @@ void MainWindow::setupRootView()
   view->installEventFilter(this);
 
   resize(1200, 1920);
-  view->resize(1200, 1920);
+  view->resize(this->width(), this->height());
 
 	ui = view;
 }

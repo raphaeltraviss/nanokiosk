@@ -41,7 +41,6 @@ Rectangle {
   }
 
   function scaleToFit() {
-    const targetAspect = aspectWidth / aspectHeight
     const imageSize = targetImage.sourceSize
 
     const lengthRatio = imageSize.width / flickableImage.width
@@ -50,6 +49,17 @@ Rectangle {
     const ratioCalcValue = lengthRatio > heightRatio ? lengthRatio : heightRatio
 
     setImageScale(1.0 / ratioCalcValue)
+  }
+
+  function scaleToContain() {
+    const img = targetImage.sourceSize
+
+    const widthRatio = flickableImage.width / img.width
+    const heightRatio = flickableImage.height / img.height
+
+    const scale = img.width > img.height ? widthRatio : heightRatio
+
+    setImageScale(1.0 * scale)
   }
 
   function zoomIn() {
@@ -105,36 +115,36 @@ Rectangle {
     enabled: false
 
     function centerToClick(x, y) {
-      console.log(x, y);
-      // @TODO: cast click coords through the Flickable to the
-      // content image below
-      // @TODO: center content.x/y coords in the Flickable view
-      flick(-x, -y)
+      const centerX = x * targetImage.scale - (width / 2) 
+      const centerY = y * targetImage.scale - (height / 2)
+      
+      contentX = centerX
+      contentY = centerY
     }
 
-    MouseArea {
+    Image {
+      id: "targetImage"
+      scale: 1
 
-      anchors.fill: parent
+      anchors.centerIn: parent
 
-      onClicked: function(ev) {
-        flickableImage.centerToClick(ev.x, ev.y)
+      source: "test"
+
+      onStatusChanged: {
+        if (status !== Image.Ready) { return }
+        //scaleToFit()
+        scaleToContain()
       }
 
-      Image {
-        id: "targetImage"
-        scale: 1
+      MouseArea {
+        anchors.fill: parent
 
-        anchors.centerIn: parent
-
-        source: "test"
-
-        onStatusChanged: {
-          if (status !== Image.Ready) { return }
-          scaleToFit()
+        onClicked: function(ev) {
+          // Coordinates of the image, without scaling
+          flickableImage.centerToClick(ev.x, ev.y)
         }
       }
     }
-
   }
 
   GridLayout {
