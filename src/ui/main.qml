@@ -37,29 +37,19 @@ Rectangle {
   function loadImage(url) {
     targetImage.source = url
     showFlickable()
-    console.log("Source size is", targetImage.sourceSize)
-  }
-
-  function scaleToFit() {
-    const imageSize = targetImage.sourceSize
-
-    const lengthRatio = imageSize.width / flickableImage.width
-    const heightRatio = imageSize.height / flickableImage.height
-
-    const ratioCalcValue = lengthRatio > heightRatio ? lengthRatio : heightRatio
-
-    setImageScale(1.0 / ratioCalcValue)
   }
 
   function scaleToContain() {
-    const img = targetImage.sourceSize
+    const frameWidth = flickableImage.width
+    const frameHeight = flickableImage.height
 
-    const widthRatio = flickableImage.width / img.width
-    const heightRatio = flickableImage.height / img.height
+    const imgWidth = targetImage.sourceSize.width
+    const imgHeight = targetImage.sourceSize.height
 
-    const scale = img.width > img.height ? widthRatio : heightRatio
+    const targetScale = frameWidth >= frameHeight ?
+    frameWidth / imgWidth : frameHeight / imgHeight
 
-    setImageScale(1.0 * scale)
+    targetImage.scale = targetScale
   }
 
   function zoomIn() {
@@ -69,11 +59,6 @@ Rectangle {
   function zoomOut() {
     targetImage.scale *= 0.8
   }
-  
-  function setImageScale(value) {
-    targetImage.scale = value
-  }
-
 
   // State transitions
 
@@ -114,12 +99,9 @@ Rectangle {
     visible: false
     enabled: false
 
-    function centerToClick(x, y) {
-      const centerX = x * targetImage.scale - (width / 2) 
-      const centerY = y * targetImage.scale - (height / 2)
-      
-      contentX = centerX
-      contentY = centerY
+    function centerToClick(ev) {
+      contentX = ev.x * targetImage.scale - (width / 2) 
+      contentY = ev.y * targetImage.scale - (height / 2)
     }
 
     Image {
@@ -132,17 +114,12 @@ Rectangle {
 
       onStatusChanged: {
         if (status !== Image.Ready) { return }
-        //scaleToFit()
         scaleToContain()
       }
 
       MouseArea {
         anchors.fill: parent
-
-        onClicked: function(ev) {
-          // Coordinates of the image, without scaling
-          flickableImage.centerToClick(ev.x, ev.y)
-        }
+        onClicked: flickableImage.centerToClick(mouse)
       }
     }
   }

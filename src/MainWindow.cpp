@@ -43,7 +43,7 @@ void MainWindow::setupRootView()
   view->setStyleSheet("background-color:black;");
   view->installEventFilter(this);
 
-  resize(1200, 1920);
+  resize(1200, 1300);
   view->resize(this->width(), this->height());
 
 	ui = view;
