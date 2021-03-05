@@ -1,4 +1,4 @@
 cmake -B./build -H./ -DCMAKE_PREFIX_PATH=/Volumes/trireme_annex/qt_lib/5.15.2/clang_64/ -DCMAKE_EXPORT_COMPILE_COMMANDS=YES \
 && cp ./build/compile_commands.json ./ \
 && make -C build \
-&& ./build/nanokiosk
+&& ./build/nanokiosk -w
