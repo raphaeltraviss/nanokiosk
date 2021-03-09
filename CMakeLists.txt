@@ -5,7 +5,7 @@ set(CMAKE_AUTORCC ON)
 
 project(NanoKiosk)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Network Qml Quick QuickWidgets Bluetooth)
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Network Qml Quick QuickWidgets Bluetooth SerialPort)
 
 qt5_add_resources(QML_qrc src/qml.qrc)
 qt5_add_resources(QML_qrc src/asset.qrc)
@@ -30,8 +30,9 @@ add_custom_command(
         $<TARGET_FILE:Qt5::Qml>
         $<TARGET_FILE:Qt5::Quick>
         $<TARGET_FILE:Qt5::Bluetooth>
+        $<TARGET_FILE:Qt5::SerialPort>
         $<TARGET_FILE:Qt5::QuickWidgets>
         $<TARGET_FILE_DIR:nanokiosk>
 )
 
-target_link_libraries(nanokiosk Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network Qt5::Quick Qt5::Qml Qt5::QuickWidgets Qt5::Bluetooth)
+target_link_libraries(nanokiosk Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network Qt5::Quick Qt5::Qml Qt5::QuickWidgets Qt5::Bluetooth Qt5::SerialPort)
