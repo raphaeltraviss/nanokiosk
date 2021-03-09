@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "BluetoothServer.h"
 #include "SocketServer.h"
+#include "SerialServer.h"
 
 #include <QTextStream>
 #include <QDebug>
