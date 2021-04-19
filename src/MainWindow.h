@@ -11,7 +11,7 @@ class MainWindow : public QMainWindow
 		Q_OBJECT
 
 public:
-  MainWindow(QWidget *parent = Q_NULLPTR);
+  MainWindow(QWidget *parent = Q_NULLPTR, QString keymap = "");
 
 public slots:
   void openConnection();

@@ -25,9 +25,10 @@ constexpr int released = 16777250;
 
 
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent, QString keymap)
 	: QMainWindow(parent)
 {
+  qDebug() << keymap;
   setupRootView();
   attachView();
   attachComms();

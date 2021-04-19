@@ -21,10 +21,16 @@ int main(int argc, char *argv[])
   QCommandLineOption windowOption(QStringList() << "w" << "windowed",
             QCoreApplication::translate("main", "Windowed mode for local dev"));
   parser.addOption(windowOption);
+
+  QCommandLineOption keymapOption(QStringList() << "k" << "keymap",
+            QCoreApplication::translate("main", "Keymap of command index to physical key binding"));
+  keymapOption.setValueName("keymap");
+  parser.addOption(keymapOption);
+
   parser.process(app);
 
-
-  MainWindow the_window;
+  QString keymap = parser.value(keymapOption);
+  MainWindow the_window(Q_NULLPTR, keymap);
 
   bool isWindowed = parser.isSet(windowOption);
 
