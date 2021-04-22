@@ -34,12 +34,25 @@ MainWindow::MainWindow(QWidget *parent, QKeySequence keyseq)
   setupRootView();
   attachView();
   attachComms();
+
+  printKeys();
 }
 
 
 int MainWindow::keyFor(MainWindow::KeyCommand cmd) {
   if (keyseq.count() < cmd) { return 0; }
   return keyseq[cmd];
+}
+
+void MainWindow::printKeys() {
+  QStringList humanKey = keyseq.toString().split(",");
+
+  qDebug() << "Keymap provided via command-line option...";
+  qDebug() << "Zoom bound to key: " << humanKey.at(0);
+  qDebug() << "Zoom bound to key: " << humanKey.at(1);
+  qDebug() << "Zoom bound to key: " << humanKey.at(2);
+
+  qDebug().noquote() << "\n";
 }
 
 void MainWindow::setupRootView()
@@ -132,15 +145,12 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 
     qDebug() << "key" << keyValue << " press on " << object;
 
-    //if (keyValue == plus || keyValue == page_up) {
     if (keyValue == keyFor(MainWindow::KeyCommand::zoom_in)) {
       QMetaObject::invokeMethod(ui->rootObject(), "zoomIn");
     }
-    //else if (keyValue == minus || keyValue == page_down) {
     else if (keyValue == keyFor(MainWindow::KeyCommand::zoom_out)) {
       QMetaObject::invokeMethod(ui->rootObject(), "zoomOut");
     }
-    //else if (keyValue == equals) {
     else if (keyValue == keyFor(MainWindow::KeyCommand::zoom_fit)) {
       QMetaObject::invokeMethod(ui->rootObject(), "scaleToFit");
     }

@@ -31,6 +31,7 @@ private:
 	void attachComms();
 	void attachView();
   int keyFor(KeyCommand cmd);
+  void printKeys();
   QQuickWidget* ui;
   BluetoothListener* bt_server;
   QKeySequence keyseq;
