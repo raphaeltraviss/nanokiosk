@@ -25,15 +25,22 @@ constexpr int released = 16777250;
 
 
 
-MainWindow::MainWindow(QWidget *parent, QString keymap)
+MainWindow::MainWindow(QWidget *parent, QKeySequence keyseq)
 	: QMainWindow(parent)
 {
-  qDebug() << keymap;
+  this->keyseq = keyseq;
+
+  qDebug() << keyseq.toString();
   setupRootView();
   attachView();
   attachComms();
 }
 
+
+int MainWindow::keyFor(MainWindow::KeyCommand cmd) {
+  if (keyseq.count() < cmd) { return 0; }
+  return keyseq[cmd];
+}
 
 void MainWindow::setupRootView()
 {
@@ -125,13 +132,16 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 
     qDebug() << "key" << keyValue << " press on " << object;
 
-    if (keyValue == plus || keyValue == page_up) {
+    //if (keyValue == plus || keyValue == page_up) {
+    if (keyValue == keyFor(MainWindow::KeyCommand::zoom_in)) {
       QMetaObject::invokeMethod(ui->rootObject(), "zoomIn");
     }
-    else if (keyValue == minus || keyValue == page_down) {
+    //else if (keyValue == minus || keyValue == page_down) {
+    else if (keyValue == keyFor(MainWindow::KeyCommand::zoom_out)) {
       QMetaObject::invokeMethod(ui->rootObject(), "zoomOut");
     }
-    else if (keyValue == equals) {
+    //else if (keyValue == equals) {
+    else if (keyValue == keyFor(MainWindow::KeyCommand::zoom_fit)) {
       QMetaObject::invokeMethod(ui->rootObject(), "scaleToFit");
     }
 

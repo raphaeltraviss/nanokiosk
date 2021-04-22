@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
   parser.process(app);
 
   QString keymap = parser.value(keymapOption);
-  MainWindow the_window(Q_NULLPTR, keymap);
+  QKeySequence keyseq(keymap);
+  MainWindow the_window(Q_NULLPTR, keyseq);
 
   bool isWindowed = parser.isSet(windowOption);
 

@@ -10,8 +10,10 @@ class MainWindow : public QMainWindow
 {
 		Q_OBJECT
 
+
 public:
-  MainWindow(QWidget *parent = Q_NULLPTR, QString keymap = "");
+  MainWindow(QWidget *parent = Q_NULLPTR, QKeySequence keyseq = QKeySequence(""));
+  enum KeyCommand { zoom_in, zoom_out, zoom_fit };
 
 public slots:
   void openConnection();
@@ -28,7 +30,9 @@ private:
 	void setupRootView();
 	void attachComms();
 	void attachView();
+  int keyFor(KeyCommand cmd);
   QQuickWidget* ui;
   BluetoothListener* bt_server;
+  QKeySequence keyseq;
 	bool eventFilter(QObject *obj, QEvent *ev);
 };
