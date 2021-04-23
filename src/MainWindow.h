@@ -12,8 +12,14 @@ class MainWindow : public QMainWindow
 
 
 public:
-  MainWindow(QWidget *parent = Q_NULLPTR, QKeySequence keyseq = QKeySequence(""));
+  MainWindow(
+    QWidget *parent = Q_NULLPTR,
+    QKeySequence keyseq = QKeySequence("FDA"),
+    bool willDemo = false,
+    QString demoScene = "new"
+  );
   enum KeyCommand { zoom_in, zoom_out, zoom_fit };
+  enum DemoScene { raw, image_loaded };
 
 public slots:
   void openConnection();
@@ -31,7 +37,9 @@ private:
 	void attachComms();
 	void attachView();
   int keyFor(KeyCommand cmd);
+  DemoScene sceneFor(QString sceneAbbr);
   void printKeys();
+  void startDemo(QString sceneAbbr);
   QQuickWidget* ui;
   BluetoothListener* bt_server;
   QKeySequence keyseq;

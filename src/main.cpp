@@ -27,11 +27,28 @@ int main(int argc, char *argv[])
   keymapOption.setValueName("keymap");
   parser.addOption(keymapOption);
 
+  QCommandLineOption demoOption(QStringList() << "d" << "demo",
+            QCoreApplication::translate("main", "Start Nanokiosk in demo mode"));
+  parser.addOption(demoOption);
+
+  // Option for use with --demo
+  QCommandLineOption sceneOption(QStringList() << "s" << "scene",
+            QCoreApplication::translate("main", "Start Nanokiosk in a specific demo state"));
+  sceneOption.setValueName("scene");
+  sceneOption.setDefaultValue("raw");
+  parser.addOption(sceneOption);
+
   parser.process(app);
 
+  // Fetch key binding command-line config
   QString keymap = parser.value(keymapOption);
   QKeySequence keyseq(keymap);
-  MainWindow the_window(Q_NULLPTR, keyseq);
+
+  // Fetch demo scene related config
+  bool willDemo = parser.isSet(demoOption);
+  QString sceneAbbr = parser.value(sceneOption);
+
+  MainWindow the_window(Q_NULLPTR, keyseq, willDemo, sceneAbbr);
 
   bool isWindowed = parser.isSet(windowOption);
 

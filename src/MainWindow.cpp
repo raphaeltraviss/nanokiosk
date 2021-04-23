@@ -16,28 +16,38 @@
 #include <iostream>
 
 
-constexpr int page_up = 16777236;
-constexpr int page_down = 16777234;
-constexpr int plus = 43;
-constexpr int minus = 45;
-constexpr int equals = 61;
-constexpr int released = 16777250;
-
-
-
-MainWindow::MainWindow(QWidget *parent, QKeySequence keyseq)
+MainWindow::MainWindow(QWidget *parent, QKeySequence keyseq, bool willDemo, QString sceneAbbr)
 	: QMainWindow(parent)
 {
-  this->keyseq = keyseq;
-
-  qDebug() << keyseq.toString();
   setupRootView();
   attachView();
   attachComms();
 
-  printKeys();
+  if (keyseq.count() > 0) {
+    this->keyseq = keyseq;
+    printKeys();
+  }
+
+  if (willDemo) {
+    startDemo(sceneAbbr);
+  }
 }
 
+MainWindow::DemoScene MainWindow::sceneFor(QString sceneAbbr) {
+  MainWindow::DemoScene scene;
+
+  if (sceneAbbr == "raw") {
+    scene = MainWindow::DemoScene::raw;
+  }
+  else if (sceneAbbr == "img") {
+    scene = MainWindow::DemoScene::image_loaded;
+  }
+  else {
+    scene = MainWindow::DemoScene::raw;
+  }
+
+  return scene;
+}
 
 int MainWindow::keyFor(MainWindow::KeyCommand cmd) {
   if (keyseq.count() < cmd) { return 0; }
@@ -48,11 +58,18 @@ void MainWindow::printKeys() {
   QStringList humanKey = keyseq.toString().split(",");
 
   qDebug() << "Keymap provided via command-line option...";
-  qDebug() << "Zoom bound to key: " << humanKey.at(0);
-  qDebug() << "Zoom bound to key: " << humanKey.at(1);
-  qDebug() << "Zoom bound to key: " << humanKey.at(2);
+  qDebug() << "Zoom In bound to key: " << humanKey.at(0);
+  qDebug() << "Zoom Out bound to key: " << humanKey.at(1);
+  qDebug() << "Zoom Fit bound to key: " << humanKey.at(2);
 
   qDebug().noquote() << "\n";
+}
+
+void MainWindow::startDemo(QString sceneAbbr) {
+  MainWindow::DemoScene scene = sceneFor(sceneAbbr);
+
+  qDebug() << "Demo mode activated!";
+  qDebug() << "Setting up scene " << scene;
 }
 
 void MainWindow::setupRootView()
@@ -93,13 +110,7 @@ void MainWindow::attachComms() {
 }
 
 void MainWindow::openConnection() {
-  qDebug() << "Opening the client connection";
-
   QList<QBluetoothHostInfo> localAdapters = QBluetoothLocalDevice::allDevices();
-  foreach (QBluetoothHostInfo bt_dev, localAdapters) {
-    qDebug() << bt_dev.name();
-    qDebug() << bt_dev.address();
-  }
   QBluetoothAddress bt_addr = localAdapters.at(0).address();
 
   bt_server->startServer(bt_addr);
@@ -143,7 +154,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 
     const int keyValue = keyEvent->key();
 
-    qDebug() << "key" << keyValue << " press on " << object;
+    //qDebug() << "key" << keyValue << " press on " << object;
 
     if (keyValue == keyFor(MainWindow::KeyCommand::zoom_in)) {
       QMetaObject::invokeMethod(ui->rootObject(), "zoomIn");
