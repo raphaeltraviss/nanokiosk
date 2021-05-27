@@ -15,8 +15,8 @@ public:
     explicit ConsoleListener(QObject *parent = nullptr);
     ~ConsoleListener(){}
 
-    void startServer(QBluetoothAddress const& address) = 0;
-    void stopServer() = 0;
+    void startServer(QBluetoothAddress const& address);
+    void stopServer();
 
 public slots:
   void sendMessage(const QString &message);

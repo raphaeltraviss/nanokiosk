@@ -2,6 +2,7 @@
 #include "BluetoothServer.h"
 #include "SocketServer.h"
 #include "SerialServer.h"
+#include "ConsoleListener.hpp"
 
 #include <QTextStream>
 #include <QDebug>
@@ -94,7 +95,8 @@ void MainWindow::attachView() {
 }
 
 void MainWindow::attachComms() {
-  bt_server = new SocketServer(this);
+  //bt_server = new SocketServer(this);
+  bt_server = new ConsoleListener(this);
 
   QObject::connect(dynamic_cast<QObject*>(bt_server), SIGNAL(messageReceived(const QString, const QString)),
                this, SLOT(logMessage(QString const&)));
