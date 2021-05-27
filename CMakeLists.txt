@@ -14,8 +14,8 @@ add_executable(nanokiosk
   src/main.cpp
   src/MainWindow.cpp
   src/BluetoothServer.cpp
-  src/BluetoothServer.h
   src/SocketServer.cpp
+  src/ConsoleListener.cpp
   ${QML_qrc}
 )
 
