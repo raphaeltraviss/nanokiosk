@@ -7,7 +7,7 @@
 ConsoleListener::ConsoleListener(QObject *parent)
   : QObject(parent)
 {
-  qWarning() << "Initializing the console listener";
+  m_notify = new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this);
 }
 
 
@@ -15,6 +15,7 @@ ConsoleListener::ConsoleListener(QObject *parent)
 
 void ConsoleListener::startServer(QBluetoothAddress const& addr) {
   qWarning() << "Starting the console listener";
+  connect(m_notify, SIGNAL(activated(int)), this, SLOT(handleText()));
 }
 
 void ConsoleListener::stopServer() {
@@ -32,15 +33,17 @@ void ConsoleListener::sendMessage(QString const& message) {
 
 // MARK: private slots
 
-void ConsoleListener::handleConnection()
-{
-  qWarning() << "New serial client requesting connection";
-  emit clientConnected("SOME_IDENTIFIER");
-}
-
 void ConsoleListener::handleText()
 {
-  qWarning() << "New serial client requesting connection";
-  emit commandLoadImage("console", "https://picsum.photos/2000/3000");
+  std::string line;
+  std::getline(std::cin, line);
+  if (std::cin.eof() || line == "quit") {
+      std::cout << "Good bye!" << std::endl;
+      emit clientDisconnected("console");
+  } else {
+      std::cout << "Echo: " << line << std::endl;
+      std::cout << "> " << std::flush;
+      emit messageReceived("console", QString::fromStdString(line));
+  }
 }
 

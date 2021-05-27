@@ -1,12 +1,15 @@
 #pragma once
 
 #include "BluetoothListener.h"
+#include <iostream>
 
 
 class ConsoleListener: public QObject, public BluetoothListener
 {
   Q_OBJECT
   Q_INTERFACES(BluetoothListener)
+
+  QSocketNotifier* m_notify;
 
 public:
     explicit ConsoleListener(QObject *parent = nullptr);
@@ -25,6 +28,5 @@ signals:
   void commandLoadImage(const QString &sender, const QString &url);
 
 private slots:
-  void handleConnection();
   void handleText();
 };
