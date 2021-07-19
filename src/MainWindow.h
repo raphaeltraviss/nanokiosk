@@ -19,7 +19,12 @@ public:
     QString demoScene = "new"
   );
   enum KeyCommand { zoom_in, zoom_out, zoom_fit };
-  enum DemoScene { raw, image_loaded };
+  enum UIState {
+    idle,
+    pairing,
+    connected,
+    image_loaded
+  };
 
 public slots:
   void openConnection();
@@ -37,9 +42,9 @@ private:
 	void attachComms();
 	void attachView();
   int keyFor(KeyCommand cmd);
-  DemoScene sceneFor(QString sceneAbbr);
+  UIState stateFor(QString stateAbbr);
   void printKeys();
-  void startDemo(QString sceneAbbr);
+  void startDemo(QString stateAbbr);
   QQuickWidget* ui;
   BluetoothListener* bt_server;
   QKeySequence keyseq;

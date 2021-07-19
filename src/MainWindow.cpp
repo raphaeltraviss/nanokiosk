@@ -17,7 +17,12 @@
 #include <iostream>
 
 
-MainWindow::MainWindow(QWidget *parent, QKeySequence keyseq, bool willDemo, QString sceneAbbr)
+MainWindow::MainWindow(
+    QWidget *parent,
+    QKeySequence keyseq,
+    bool willDemo,
+    QString stateAbbr
+)
 	: QMainWindow(parent)
 {
   setupRootView();
@@ -30,24 +35,24 @@ MainWindow::MainWindow(QWidget *parent, QKeySequence keyseq, bool willDemo, QStr
   }
 
   if (willDemo) {
-    startDemo(sceneAbbr);
+    startDemo(stateAbbr);
   }
 }
 
-MainWindow::DemoScene MainWindow::sceneFor(QString sceneAbbr) {
-  MainWindow::DemoScene scene;
+MainWindow::UIState MainWindow::stateFor(QString stateSymbol) {
+  MainWindow::UIState state;
 
-  if (sceneAbbr == "raw") {
-    scene = MainWindow::DemoScene::raw;
+  if (stateSymbol == "idle") {
+    state = MainWindow::UIState::idle;
   }
-  else if (sceneAbbr == "img") {
-    scene = MainWindow::DemoScene::image_loaded;
+  else if (stateSymbol == "img") {
+    state = MainWindow::UIState::image_loaded;
   }
   else {
-    scene = MainWindow::DemoScene::raw;
+    state = MainWindow::UIState::idle;
   }
 
-  return scene;
+  return state;
 }
 
 int MainWindow::keyFor(MainWindow::KeyCommand cmd) {
@@ -66,11 +71,10 @@ void MainWindow::printKeys() {
   qDebug().noquote() << "\n";
 }
 
-void MainWindow::startDemo(QString sceneAbbr) {
-  MainWindow::DemoScene scene = sceneFor(sceneAbbr);
+void MainWindow::startDemo(QString stateSymbol) {
+  MainWindow::UIState state = stateFor(stateSymbol);
 
   qDebug() << "Demo mode activated!";
-  qDebug() << "Setting up scene " << scene;
 }
 
 void MainWindow::setupRootView()

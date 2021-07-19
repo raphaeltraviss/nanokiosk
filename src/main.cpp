@@ -31,7 +31,6 @@ int main(int argc, char *argv[])
             QCoreApplication::translate("main", "Start Nanokiosk in demo mode"));
   parser.addOption(demoOption);
 
-  // Option for use with --demo
   QCommandLineOption sceneOption(QStringList() << "s" << "scene",
             QCoreApplication::translate("main", "Start Nanokiosk in a specific demo state"));
   sceneOption.setValueName("scene");
