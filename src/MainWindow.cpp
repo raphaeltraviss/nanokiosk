@@ -45,6 +45,12 @@ MainWindow::UIState MainWindow::stateFor(QString stateSymbol) {
   if (stateSymbol == "idle") {
     state = MainWindow::UIState::idle;
   }
+  else if (stateSymbol == "pair") {
+    state = MainWindow::UIState::pairing;
+  }
+  else if (stateSymbol == "conn") {
+    state = MainWindow::UIState::connected;
+  }
   else if (stateSymbol == "img") {
     state = MainWindow::UIState::image_loaded;
   }
@@ -74,7 +80,32 @@ void MainWindow::printKeys() {
 void MainWindow::startDemo(QString stateSymbol) {
   MainWindow::UIState state = stateFor(stateSymbol);
 
-  qDebug() << "Demo mode activated!";
+  switch (state) {
+    case MainWindow::UIState::idle:
+      qDebug("setting up idle state");
+      break;
+    case MainWindow::UIState::pairing:
+      qDebug("setting up pairing state");
+      break;
+    case MainWindow::UIState::connected:
+      qDebug("setting up connected state");
+      break;
+    case MainWindow::UIState::image_loaded:
+      qDebug("setting up image_loaded state");
+
+      // This URL works:
+      //QUrl url("https://picsum.photos/2000/3000");
+
+      // This one doesn't:
+      QUrl url("faderhead_orig");
+
+      // Neither does this one:
+      //QUrl url = QUrl::fromLocalFile("assets/faderhead_orig.jpeg");
+
+      QMetaObject::invokeMethod(ui->rootObject(), "loadImage",
+        Q_ARG(QVariant, url));
+      break;
+  }
 }
 
 void MainWindow::setupRootView()
@@ -160,12 +191,20 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 
     const int keyValue = keyEvent->key();
 
-    //qDebug() << "key" << keyValue << " press on " << object;
+    qDebug() << "key" << keyValue << " press on " << object;
 
-    if (keyValue == keyFor(MainWindow::KeyCommand::zoom_in)) {
+    if (
+        keyValue == keyFor(MainWindow::KeyCommand::zoom_in)
+        ||
+        keyValue == 43 // hard-coded plus
+      ) {
       QMetaObject::invokeMethod(ui->rootObject(), "zoomIn");
     }
-    else if (keyValue == keyFor(MainWindow::KeyCommand::zoom_out)) {
+    else if (
+        keyValue == keyFor(MainWindow::KeyCommand::zoom_out)
+        ||
+        keyValue == 45 // hard-coded minus
+      ) {
       QMetaObject::invokeMethod(ui->rootObject(), "zoomOut");
     }
     else if (keyValue == keyFor(MainWindow::KeyCommand::zoom_fit)) {

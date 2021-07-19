@@ -47,6 +47,6 @@ private:
   void startDemo(QString stateAbbr);
   QQuickWidget* ui;
   BluetoothListener* bt_server;
-  QKeySequence keyseq;
+  QKeySequence keyseq = QKeySequence("01f");
 	bool eventFilter(QObject *obj, QEvent *ev);
 };

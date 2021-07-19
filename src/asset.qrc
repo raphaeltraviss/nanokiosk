@@ -4,6 +4,10 @@
   <file alias="lcars_upper_right">../assets/lcars_upper_right.png</file>
   <file alias="lcars_lower_right">../assets/lcars_lower_right.png</file>
   <file alias="lcars_lower_left">../assets/lcars_lower_left.png</file>
+  <file alias="faderhead_orig">../assets/faderhead_orig.jpeg</file>
+
+  <file alias="test_pink">../assets/test_pink.png</file>
+
   <file alias="test">../nanokiosk.jpeg</file>
 </qresource>
 </RCC>
