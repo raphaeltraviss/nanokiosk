@@ -14,9 +14,9 @@ class MainWindow : public QMainWindow
 public:
   MainWindow(
     QWidget *parent = Q_NULLPTR,
-    QKeySequence keyseq = QKeySequence("FDA"),
+    QString keymap = "",
     bool willDemo = false,
-    QString demoScene = "new"
+    QString demoScene = ""
   );
   enum KeyCommand { zoom_in, zoom_out, zoom_fit };
   enum UIState {
@@ -41,12 +41,11 @@ private:
 	void setupRootView();
 	void attachComms();
 	void attachView();
-  int keyFor(KeyCommand cmd);
   UIState stateFor(QString stateAbbr);
   void printKeys();
   void startDemo(QString stateAbbr);
   QQuickWidget* ui;
   BluetoothListener* bt_server;
-  QKeySequence keyseq = QKeySequence("01f");
+  QList<QKeySequence> keyseq;
 	bool eventFilter(QObject *obj, QEvent *ev);
 };

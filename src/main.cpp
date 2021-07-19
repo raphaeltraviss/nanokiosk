@@ -41,13 +41,12 @@ int main(int argc, char *argv[])
 
   // Fetch key binding command-line config
   QString keymap = parser.value(keymapOption);
-  QKeySequence keyseq(keymap);
 
   // Fetch demo scene related config
   bool willDemo = parser.isSet(demoOption);
   QString sceneAbbr = parser.value(sceneOption);
 
-  MainWindow the_window(Q_NULLPTR, keyseq, willDemo, sceneAbbr);
+  MainWindow the_window(Q_NULLPTR, keymap, willDemo, sceneAbbr);
 
   bool isWindowed = parser.isSet(windowOption);
 

@@ -19,7 +19,7 @@
 
 MainWindow::MainWindow(
     QWidget *parent,
-    QKeySequence keyseq,
+    QString keymap,
     bool willDemo,
     QString stateAbbr
 )
@@ -29,10 +29,18 @@ MainWindow::MainWindow(
   attachView();
   attachComms();
 
-  if (keyseq.count() > 0) {
-    this->keyseq = keyseq;
-    printKeys();
+  if (keyseq.length() > 0) {
+    // @TODO: create a new key sequence list from string
+    // Find out how QKeySequence::listFromString parses the string
   }
+  else {
+    qDebug("setting up key sequence");
+    keyseq.append(QKeySequence("0"));
+    keyseq.append(QKeySequence("1"));
+    keyseq.append(QKeySequence("F"));
+  }
+
+  printKeys();
 
   if (willDemo) {
     startDemo(stateAbbr);
@@ -61,18 +69,12 @@ MainWindow::UIState MainWindow::stateFor(QString stateSymbol) {
   return state;
 }
 
-int MainWindow::keyFor(MainWindow::KeyCommand cmd) {
-  if (keyseq.count() < cmd) { return 0; }
-  return keyseq[cmd];
-}
-
 void MainWindow::printKeys() {
-  QStringList humanKey = keyseq.toString().split(",");
 
   qDebug() << "Keymap provided via command-line option...";
-  qDebug() << "Zoom In bound to key: " << humanKey.at(0);
-  qDebug() << "Zoom Out bound to key: " << humanKey.at(1);
-  qDebug() << "Zoom Fit bound to key: " << humanKey.at(2);
+  qDebug() << "Zoom In bound to key: " << keyseq.at(0)[0];
+  qDebug() << "Zoom Out bound to key: " << keyseq.at(1)[0];
+  qDebug() << "Zoom Fit bound to key: " << keyseq.at(2)[0];
 
   qDebug().noquote() << "\n";
 }
@@ -185,21 +187,23 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
     qDebug() << "key" << keyValue << " press on " << object;
 
     if (
-        keyValue == keyFor(MainWindow::KeyCommand::zoom_in)
+        keyValue == keyseq[0][0]
         ||
         keyValue == 43 // hard-coded plus
       ) {
       QMetaObject::invokeMethod(ui->rootObject(), "zoomIn");
     }
     else if (
-        keyValue == keyFor(MainWindow::KeyCommand::zoom_out)
+        keyValue == keyseq[1][0]
         ||
         keyValue == 45 // hard-coded minus
       ) {
       QMetaObject::invokeMethod(ui->rootObject(), "zoomOut");
     }
-    else if (keyValue == keyFor(MainWindow::KeyCommand::zoom_fit)) {
-      QMetaObject::invokeMethod(ui->rootObject(), "scaleToFit");
+    else if (
+        keyValue == keyseq[2][0]
+      ) {
+      QMetaObject::invokeMethod(ui->rootObject(), "scaleToContain");
     }
 
     return true;
