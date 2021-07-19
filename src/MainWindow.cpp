@@ -93,15 +93,7 @@ void MainWindow::startDemo(QString stateSymbol) {
     case MainWindow::UIState::image_loaded:
       qDebug("setting up image_loaded state");
 
-      // This URL works:
-      //QUrl url("https://picsum.photos/2000/3000");
-
-      // This one doesn't:
       QUrl url("faderhead_orig");
-
-      // Neither does this one:
-      //QUrl url = QUrl::fromLocalFile("assets/faderhead_orig.jpeg");
-
       QMetaObject::invokeMethod(ui->rootObject(), "loadImage",
         Q_ARG(QVariant, url));
       break;
@@ -155,7 +147,6 @@ void MainWindow::openConnection() {
 
 void MainWindow::closeConnection() {
   bt_server->stopServer();
-  // @TODO: check that it was stopped successfully
   QMetaObject::invokeMethod(ui->rootObject(), "toIdle");
 }
 

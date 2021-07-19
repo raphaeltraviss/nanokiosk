@@ -5,8 +5,11 @@ import QtQuick.Controls 2.15
 Rectangle {
   id: "ui"
 
+  // Initial width for troubleshooting; actual size is set via
+  // C++ resize event
   width: 100
   height: 100
+
   color: "pink"
 
   signal pleaseOpenConnection()
@@ -15,6 +18,16 @@ Rectangle {
   property string myState: "NANOKIOSK IDLE"
   property int aspectWidth: 3
   property int aspectHeight: 4
+
+
+  // Event handlers
+
+  onWidthChanged: {
+    scaleToContain()
+  }
+  onHeightChanged: {
+    scaleToContain()
+  }
 
 
   // UI mutation
@@ -41,10 +54,6 @@ Rectangle {
   function scaleToContain() {
     const frameWidth = flickableImage.width
     const frameHeight = flickableImage.height
-
-    // @TODO: frame is zero if we set the image before flickableImage
-    // is on-screen
-    console.log(frameWidth, frameHeight)
 
     const imgWidth = targetImage.sourceSize.width
     const imgHeight = targetImage.sourceSize.height
@@ -94,9 +103,6 @@ Rectangle {
     anchors.fill: parent
     anchors.centerIn: parent
 
-    // @TODO: setting a local image sets the scale, which determines
-    // the contentX/Y... but the content x/y determin the frame that 
-    // it needs to calculate this
     contentWidth: targetImage.sourceSize.width * targetImage.scale
     contentHeight: targetImage.sourceSize.height * targetImage.scale
 
