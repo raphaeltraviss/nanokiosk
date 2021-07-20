@@ -176,37 +176,77 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
 	ui->resize(the_width, ui->height());
 }
 
+QKeySequence MainWindow::keyEventToSequence(QKeyEvent* keyEvent) {
+  QKeySequence emptySeq = QKeySequence();
+
+  int keyInt = keyEvent->key(); 
+  Qt::Key key = static_cast<Qt::Key>(keyInt); 
+
+  // Unknown key from... a macro?
+  if(key == Qt::Key_unknown) { return emptySeq; }
+
+  // Single keypress of a modifier key
+  if(key == Qt::Key_Control || 
+      key == Qt::Key_Shift || 
+      key == Qt::Key_Alt || 
+      key == Qt::Key_Meta)
+  { 
+      return emptySeq; 
+  } 
+
+  Qt::KeyboardModifiers modifiers = keyEvent->modifiers(); 
+  QString keyText = keyEvent->text(); 
+
+  qDebug() << "Pressed Key:" << keyText; 
+
+  QList<Qt::Key> modifiersList; 
+  if(modifiers & Qt::ShiftModifier) 
+      keyInt += Qt::SHIFT; 
+  if(modifiers & Qt::ControlModifier) 
+      keyInt += Qt::CTRL; 
+  if(modifiers & Qt::AltModifier) 
+      keyInt += Qt::ALT; 
+  if(modifiers & Qt::MetaModifier) 
+      keyInt += Qt::META; 
+
+  QKeySequence result = QKeySequence(keyInt);
+
+  return result;
+}
+
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
 {
-  if (event->type() == QEvent::KeyPress) {
-    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+  if (event->type() != QEvent::KeyPress) { return false; }
 
-    const int keyValue = keyEvent->key();
+  QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
-    qDebug() << "key" << keyValue << " press on " << object;
+  QKeySequence test = keyEventToSequence(keyEvent);
+  qDebug() << "matching key seq: " << test.toString();
 
-    if (
-        keyValue == keyseq[0][0]
-        ||
-        keyValue == 43 // hard-coded plus
-      ) {
-      QMetaObject::invokeMethod(ui->rootObject(), "zoomIn");
-    }
-    else if (
-        keyValue == keyseq[1][0]
-        ||
-        keyValue == 45 // hard-coded minus
-      ) {
-      QMetaObject::invokeMethod(ui->rootObject(), "zoomOut");
-    }
-    else if (
-        keyValue == keyseq[2][0]
-      ) {
-      QMetaObject::invokeMethod(ui->rootObject(), "scaleToContain");
-    }
+  const int keyValue = keyEvent->key();
 
-    return true;
+  qDebug() << "key" << keyValue << " press on " << object;
+
+  if (
+      keyValue == keyseq[0][0]
+      ||
+      keyValue == 43 // hard-coded plus
+    ) {
+    QMetaObject::invokeMethod(ui->rootObject(), "zoomIn");
   }
-  return false;
+  else if (
+      keyValue == keyseq[1][0]
+      ||
+      keyValue == 45 // hard-coded minus
+    ) {
+    QMetaObject::invokeMethod(ui->rootObject(), "zoomOut");
+  }
+  else if (
+      keyValue == keyseq[2][0]
+    ) {
+    QMetaObject::invokeMethod(ui->rootObject(), "scaleToContain");
+  }
+
+  return true;
 }

@@ -47,5 +47,6 @@ private:
   QQuickWidget* ui;
   BluetoothListener* bt_server;
   QList<QKeySequence> keyseq;
+  QKeySequence keyEventToSequence(QKeyEvent* keyEvent);
 	bool eventFilter(QObject *obj, QEvent *ev);
 };
